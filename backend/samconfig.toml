@@ -1,0 +1,10 @@
+version = 0.1
+[default.deploy.parameters]
+stack_name = "sam-app"
+resolve_s3 = true
+s3_prefix = "sam-app"
+region = "us-west-2"
+confirm_changeset = true
+capabilities = "CAPABILITY_IAM"
+parameter_overrides = "Timeout=\"40\" MemorySize=\"512\" Entrypoint=\"mrhota.alphabetsuperset.b.core\""
+image_repositories = ["ExampleLambdaFunction=448338507191.dkr.ecr.us-west-2.amazonaws.com/samapp7427b055/examplelambdafunctiond3ef7691repo"]

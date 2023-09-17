@@ -1,0 +1,4 @@
+{:name "mrhota.alphabetsuperset.b.core.ExampleLambda",
+ :request {:event {:pathParameters {:message "Hello world"}},
+           :ctx {}},
+ :propagate true}

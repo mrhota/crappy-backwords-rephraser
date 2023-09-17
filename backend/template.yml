@@ -1,0 +1,61 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  Example basic lambda using `holy-lambda` micro library
+
+Parameters:
+  Timeout:
+    Type: Number
+    Default: 40
+  MemorySize:
+    Type: Number
+    Default: 512
+  Entrypoint:
+    Type: String
+    Default: mrhota.alphabetsuperset.b.core
+
+Globals:
+  Function:
+    Timeout: !Ref Timeout
+    MemorySize: !Ref MemorySize
+    Environment:
+      Variables:
+        HL_ENTRYPOINT: !Ref Entrypoint
+
+Resources:
+  ExampleLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: ExampleLambdaFunction
+      PackageType: Image
+      Events:
+        HelloEvent:
+          Type: HttpApi
+          Properties:
+            ApiId: !Ref ExampleHttpApi
+            Path: /
+            Method: GET
+    Metadata:
+      Dockerfile: Dockerfile
+      DockerContext: .
+      DockerTag: v1
+
+  ExampleHttpApi:
+    Type: AWS::Serverless::HttpApi
+    DeletionPolicy: Retain
+    Properties:
+      StageName: Prod
+      CorsConfiguration:
+        AllowOrigins:
+          - "https://mrhota.github.io"
+          - "http://localhost:1313"
+        AllowHeaders:
+          - "*"
+        AllowMethods:
+          - GET
+
+Outputs:
+  ExampleLambdaEndpoint:
+    Description: Endpoint for ExampleLambdaFunction
+    Value:
+      Fn::Sub: https://${ExampleHttpApi}.execute-api.${AWS::Region}.amazonaws.com
